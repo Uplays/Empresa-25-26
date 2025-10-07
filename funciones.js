@@ -1,154 +1,181 @@
-// Toggle menú móvil
+// funciones.js
+
+// --- 1. Toggle menú móvil ---
 document.querySelector(".nav-toggle").addEventListener("click", () => {
-  document.querySelector(".nav-links").classList.toggle("open");
+    // Usamos querySelector para que funcione tanto en pruebasweb.html como en tienda.html
+    const navLinks = document.querySelector(".nav-links");
+    if (navLinks) {
+        navLinks.classList.toggle("open");
+    }
 });
 
-// Carousel simple
+// --- 2. Carousel simple (Solo funciona en pruebasweb.html) ---
 document.querySelectorAll(".carousel").forEach(carousel => {
-  const inner = carousel.querySelector(".carousel-inner");
-  const prev = carousel.querySelector(".prev");
-  const next = carousel.querySelector(".next");
-  let index = 0;
-  const items = inner.children;
-  const total = items.length;
+    const inner = carousel.querySelector(".carousel-inner");
+    const prev = carousel.querySelector(".prev");
+    const next = carousel.querySelector(".next");
+    const items = inner.children;
+    const total = items.length;
+    let index = 0;
 
-  function showSlide(i){
-    inner.style.transform = `translateX(-${i * 100}%)`;
-  }
+    // Asegura que hay elementos para el carrusel
+    if (total === 0) return;
 
-  prev.addEventListener("click", ()=>{
-    index = (index - 1 + total) % total;
+    // Ajusta el carrusel al tamaño del primer elemento
+    function showSlide(i) {
+        // Usamos la propiedad transform para deslizar
+        inner.style.transform = `translateX(-${i * 100}%)`;
+    }
+
+    prev.addEventListener("click", () => {
+        index = (index - 1 + total) % total;
+        showSlide(index);
+    });
+
+    next.addEventListener("click", () => {
+        index = (index + 1) % total;
+        showSlide(index);
+    });
+
+    // Inicializa la posición
     showSlide(index);
-  });
-
-  next.addEventListener("click", ()=>{
-    index = (index + 1) % total;
-    showSlide(index);
-  });
 });
 
-// Contadores animados
-const counters = document.querySelectorAll(".counter");
-counters.forEach(counter => {
-  const updateCount = () => {
+// --- 3. Contadores animados (Solo funciona en pruebasweb.html) ---
+function animateCounter(counter) {
     const target = +counter.getAttribute("data-target");
-    const count = +counter.innerText;
-    const increment = target / 100;
-    if(count < target){
-      counter.innerText = Math.ceil(count + increment);
-      setTimeout(updateCount,20);
-    } else {
-      counter.innerText = target;
-    }
-  };
-  updateCount();
-});
+    let count = 0;
+    const increment = target / 100; // Un incremento suave
 
-// Likes y Dislikes persistentes con corazones
+    const updateCount = () => {
+        if (count < target) {
+            count += increment;
+            counter.innerText = Math.ceil(count);
+            setTimeout(updateCount, 20);
+        } else {
+            counter.innerText = target;
+        }
+    };
+    updateCount();
+}
+
+// --- 4. Likes y Dislikes persistentes (Funciona en ambas páginas) ---
 document.querySelectorAll(".merch-card").forEach((card, index) => {
-  const likeBtn = card.querySelector(".like-btn");
-  
-  // Crear botón de dislike
-  const dislikeBtn = document.createElement("div");
-  dislikeBtn.classList.add("like-btn", "dislike-btn");
-  dislikeBtn.innerHTML = "💔 <span>0</span>";
-  card.appendChild(dislikeBtn);
+    const likeBtn = card.querySelector(".like-btn");
+    
+    // Crear el contenedor de likes/dislikes
+    const wrap = document.createElement("div");
+    wrap.classList.add("like-dislike-wrap");
+    
+    // Crear y añadir botón de dislike
+    const dislikeBtn = document.createElement("div");
+    dislikeBtn.classList.add("like-btn", "dislike-btn");
+    dislikeBtn.innerHTML = "💔 <span>0</span>";
+    
+    // Mover el botón de like existente al wrap y añadir el dislike
+    wrap.appendChild(likeBtn);
+    wrap.appendChild(dislikeBtn);
+    card.appendChild(wrap);
 
-  const likeKey = `like-${index}`;
-  const dislikeKey = `dislike-${index}`;
+    // Usamos el data-id para generar una clave única y persistente, 
+    // y el prefijo 'store-' para la nueva tienda
+    const productID = card.getAttribute("data-id") || index;
+    const likeKey = `store-like-${productID}`;
+    const dislikeKey = `store-dislike-${productID}`;
 
-  // Cargar valores desde localStorage
-  const likeValue = localStorage.getItem(likeKey);
-  const dislikeValue = localStorage.getItem(dislikeKey);
+    // Cargar valores desde localStorage
+    let likeValue = +(localStorage.getItem(likeKey) || 0);
+    let dislikeValue = +(localStorage.getItem(dislikeKey) || 0);
 
-  if (likeValue) {
     likeBtn.querySelector("span").innerText = likeValue;
-    if(likeValue>0) likeBtn.classList.add("active");
-  }
-  if (dislikeValue) {
     dislikeBtn.querySelector("span").innerText = dislikeValue;
-    if(dislikeValue>0) dislikeBtn.classList.add("active");
-  }
 
-  // Click en Like
-  likeBtn.addEventListener("click", () => {
-    let count = +likeBtn.querySelector("span").innerText;
-
-    if (!likeBtn.classList.contains("active")) {
-      count++;
-      likeBtn.classList.add("active");
-      likeBtn.innerHTML = `❤️ <span>${count}</span>`;
-      // Quitar dislike si estaba activo
-      if (dislikeBtn.classList.contains("active")) {
-        dislikeBtn.classList.remove("active");
-        let dCount = +dislikeBtn.querySelector("span").innerText;
-        dCount = dCount > 0 ? dCount - 1 : 0;
-        dislikeBtn.querySelector("span").innerText = dCount;
-        localStorage.setItem(dislikeKey, dCount);
-      }
-    } else {
-      count--;
-      likeBtn.classList.remove("active");
-      likeBtn.innerHTML = `❤️ <span>${count}</span>`;
+    // Comprobar si ya están activos
+    if (localStorage.getItem(`active-${likeKey}`) === 'true') {
+        likeBtn.classList.add("active");
+    }
+    if (localStorage.getItem(`active-${dislikeKey}`) === 'true') {
+        dislikeBtn.classList.add("active");
     }
 
-    likeBtn.querySelector("span").innerText = count;
-    localStorage.setItem(likeKey, count);
-  });
+    // Función para actualizar y guardar (refactorizado)
+    const update = (btn, key, otherBtn, otherKey) => {
+        let count = +(localStorage.getItem(key) || 0);
+        let otherCount = +(localStorage.getItem(otherKey) || 0);
 
-  // Click en Dislike
-  dislikeBtn.addEventListener("click", () => {
-    let count = +dislikeBtn.querySelector("span").innerText;
+        if (!btn.classList.contains("active")) {
+            // Activar: Sumar 1 y si el opuesto está activo, restarle 1
+            count += 1;
+            btn.classList.add("active");
+            localStorage.setItem(`active-${key}`, 'true');
+            
+            if (otherBtn.classList.contains("active")) {
+                otherCount = otherCount > 0 ? otherCount - 1 : 0;
+                otherBtn.classList.remove("active");
+                localStorage.setItem(`active-${otherKey}`, 'false');
+                otherBtn.querySelector("span").innerText = otherCount;
+                localStorage.setItem(otherKey, otherCount);
+            }
+        } else {
+            // Desactivar: Restar 1
+            count = count > 0 ? count - 1 : 0;
+            btn.classList.remove("active");
+            localStorage.setItem(`active-${key}`, 'false');
+        }
 
-    if (!dislikeBtn.classList.contains("active")) {
-      count++;
-      dislikeBtn.classList.add("active");
-      dislikeBtn.innerHTML = `💔 <span>${count}</span>`;
-      // Quitar like si estaba activo
-      if (likeBtn.classList.contains("active")) {
-        likeBtn.classList.remove("active");
-        let lCount = +likeBtn.querySelector("span").innerText;
-        lCount = lCount > 0 ? lCount - 1 : 0;
-        likeBtn.innerHTML = `❤️ <span>${lCount}</span>`;
-        localStorage.setItem(likeKey, lCount);
-      }
-    } else {
-      count--;
-      dislikeBtn.classList.remove("active");
-      dislikeBtn.innerHTML = `💔 <span>${count}</span>`;
-    }
+        btn.querySelector("span").innerText = count;
+        localStorage.setItem(key, count);
+    };
 
-    dislikeBtn.querySelector("span").innerText = count;
-    localStorage.setItem(dislikeKey, count);
-  });
+    likeBtn.addEventListener("click", () => update(likeBtn, likeKey, dislikeBtn, dislikeKey));
+    dislikeBtn.addEventListener("click", () => update(dislikeBtn, dislikeKey, likeBtn, likeKey));
 });
 
 
-// Scroll a secciones visible
+// --- 5. Scroll a secciones visible (Animación de entrada) ---
 const sections = document.querySelectorAll(".card-section");
-const observer = new IntersectionObserver(entries=>{
-  entries.forEach(entry=>{
-    if(entry.isIntersecting) entry.target.classList.add("visible");
-  });
-},{threshold:0.2});
-sections.forEach(sec=>observer.observe(sec));
+const counterSection = document.getElementById("contador");
 
-// Scroll top button
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            // Si la sección del contador es visible, activamos los contadores
+            if (entry.target.id === "contador") {
+                const counters = entry.target.querySelectorAll(".counter");
+                counters.forEach(counter => {
+                    // Solo animar si no ha sido animado (resetear a 0 primero)
+                    if (counter.innerText === "0" || counter.innerText !== counter.getAttribute("data-target")) {
+                        counter.innerText = "0"; 
+                        animateCounter(counter);
+                    }
+                });
+                // Desconectar el observer del contador una vez que se activa
+                observer.unobserve(entry.target); 
+            }
+        } 
+    });
+}, { threshold: 0.2 });
+
+sections.forEach(sec => observer.observe(sec));
+
+// --- 6. Botón de Scroll Top ---
 const scrollBtn = document.createElement("button");
 scrollBtn.id = "scrollTop";
 scrollBtn.innerHTML = "⬆";
 document.body.appendChild(scrollBtn);
-scrollBtn.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
-window.addEventListener("scroll", ()=>{
-  if(window.scrollY > 200) scrollBtn.classList.add("show");
-  else scrollBtn.classList.remove("show");
+
+scrollBtn.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+window.addEventListener("scroll", () => {
+    if (window.scrollY > 400) scrollBtn.classList.add("show");
+    else scrollBtn.classList.remove("show");
 });
 
-// Abrir formulario según el producto
+// --- 7. Abrir formulario (Botón Comprar) ---
 document.querySelectorAll(".buy-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const url = btn.getAttribute("data-url");
-    if(url) window.open(url, "_blank");
-  });
+    btn.addEventListener("click", () => {
+        const url = btn.getAttribute("data-url");
+        if(url) window.open(url, "_blank");
+    });
 });
-
