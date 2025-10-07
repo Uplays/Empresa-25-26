@@ -212,6 +212,19 @@ nav {
   font-weight: 300;
 }
 
+/* Estilo para el subtítulo animado */
+.header-subtitle {
+    border-right: 4px solid white; /* Cursor parpadeante */
+    padding-right: 4px;
+    animation: blink-cursor 0.75s step-end infinite;
+    display: inline-block; /* Para que el borde se vea bien */
+}
+
+@keyframes blink-cursor {
+  from, to { border-color: transparent }
+  50% { border-color: white; }
+}
+
 .header-content a {
   display: inline-block;
   background-color: var(--color-secondary);
@@ -302,6 +315,7 @@ nav {
   margin-top: 1rem;
   transition: all 0.3s ease;
   box-shadow: 0 4px 10px rgba(90, 24, 154, 0.4);
+  width: 100%; /* Ocupa todo el ancho */
 }
 
 .merch-card .buy-btn:hover {
@@ -311,44 +325,68 @@ nav {
 
 .like-dislike-wrap {
     display: flex;
-    justify-content: center;
+    justify-content: space-between; /* Distribuye espacio entre like y dislike */
     width: 100%;
     margin-top: 1rem;
-    gap: 15px;
+    padding: 0 1rem;
 }
 
+/* Estilo Base para Like/Dislike */
 .like-btn, .dislike-btn {
-    font-size: 1.5rem;
+    font-size: 1.1rem; /* Tamaño más sutil */
     cursor: pointer;
-    transition: color 0.2s ease, transform 0.2s ease;
+    transition: all 0.3s ease, transform 0.2s ease;
     display: flex;
     align-items: center;
     gap: 8px;
     font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    background-color: var(--color-background); /* Fondo suave */
+    box-shadow: 2px 2px 5px var(--color-shadow);
 }
 
 .like-btn:hover, .dislike-btn:hover {
-    transform: scale(1.1);
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 8px var(--color-shadow);
 }
 
 .like-btn span, .dislike-btn span {
     font-size: 1rem;
-    color: var(--color-text-light);
+    color: var(--color-primary); /* Color de texto del número */
+    font-weight: 800;
 }
 
+/* Estado Activo (Like) */
 .like-btn.active {
+    background-color: #ff000030; /* Fondo rojo claro */
     color: #ff0000;
     animation: pulse 0.5s 1;
 }
 
+.like-btn.active span {
+    color: #ff0000;
+}
+
+/* Estilo y Estado Activo (Dislike) */
+.dislike-btn {
+    color: var(--color-text-light); /* Gris suave por defecto */
+}
+
 .dislike-btn.active {
-    color: #f44336;
+    background-color: #007bff30; /* Fondo azul claro (para un contraste) */
+    color: #007bff;
     animation: pulse 0.5s 1;
 }
 
+.dislike-btn.active span {
+    color: #007bff;
+}
+
+
 @keyframes pulse {
   0% { transform: scale(1); }
-  50% { transform: scale(1.2); }
+  50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
 
@@ -592,6 +630,9 @@ footer a:hover {
     .merch-card img {
         max-height: 250px;
     }
+    .like-dislike-wrap {
+        padding: 0 0.5rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -604,5 +645,12 @@ footer a:hover {
     h2 {
         font-size: 2rem;
         margin-bottom: 2rem;
+    }
+    .like-btn, .dislike-btn {
+        font-size: 1rem;
+        padding: 0.5rem;
+    }
+    .like-btn span, .dislike-btn span {
+        font-size: 0.9rem;
     }
 }
