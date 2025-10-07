@@ -9,7 +9,7 @@ document.querySelector(".nav-toggle").addEventListener("click", () => {
     }
 });
 
-// --- 2. Carousel simple (Solo funciona en pruebasweb.html) ---
+// --- 2. Carousel simple (Solo funciona en index.html) ---
 document.querySelectorAll(".carousel").forEach(carousel => {
     const inner = carousel.querySelector(".carousel-inner");
     const prev = carousel.querySelector(".prev");
@@ -27,21 +27,23 @@ document.querySelectorAll(".carousel").forEach(carousel => {
         inner.style.transform = `translateX(-${i * 100}%)`;
     }
 
-    prev.addEventListener("click", () => {
-        index = (index - 1 + total) % total;
-        showSlide(index);
-    });
+    if (prev && next) { // Comprobación para evitar errores en tienda.html
+        prev.addEventListener("click", () => {
+            index = (index - 1 + total) % total;
+            showSlide(index);
+        });
 
-    next.addEventListener("click", () => {
-        index = (index + 1) % total;
-        showSlide(index);
-    });
+        next.addEventListener("click", () => {
+            index = (index + 1) % total;
+            showSlide(index);
+        });
 
-    // Inicializa la posición
-    showSlide(index);
+        // Inicializa la posición
+        showSlide(index);
+    }
 });
 
-// --- 3. Contadores animados (Solo funciona en pruebasweb.html) ---
+// --- 3. Contadores animados (Solo funciona en index.html) ---
 function animateCounter(counter) {
     const target = +counter.getAttribute("data-target");
     let count = 0;
@@ -61,27 +63,35 @@ function animateCounter(counter) {
 
 // --- 4. Likes y Dislikes persistentes (Funciona en ambas páginas) ---
 document.querySelectorAll(".merch-card").forEach((card, index) => {
-    const likeBtn = card.querySelector(".like-btn");
+    // Los botones iniciales están en el HTML con la clase .like-btn. Los renombraremos.
+    const initialLikeBtn = card.querySelector(".like-btn");
     
     // Crear el contenedor de likes/dislikes
     const wrap = document.createElement("div");
     wrap.classList.add("like-dislike-wrap");
     
-    // Crear y añadir botón de dislike
+    // Crear el botón de dislike
     const dislikeBtn = document.createElement("div");
     dislikeBtn.classList.add("like-btn", "dislike-btn");
-    dislikeBtn.innerHTML = "💔 <span>0</span>";
+    dislikeBtn.innerHTML = "💔 <span>0</span>"; // Corazón roto para dislike
+
+    // Renombrar el botón de like para que no sea solo un contenedor
+    initialLikeBtn.classList.remove("like-btn"); // Quitar la clase base si la tenía
+    initialLikeBtn.classList.add("like-btn", "product-like-btn"); // Nueva clase para el like
+    initialLikeBtn.innerHTML = "👍 <span>0</span>"; // Pulgar arriba para like
     
-    // Mover el botón de like existente al wrap y añadir el dislike
-    wrap.appendChild(likeBtn);
+    // Mover los botones al wrap
+    wrap.appendChild(initialLikeBtn);
     wrap.appendChild(dislikeBtn);
     card.appendChild(wrap);
 
     // Usamos el data-id para generar una clave única y persistente, 
     // y el prefijo 'store-' para la nueva tienda
-    const productID = card.getAttribute("data-id") || index;
+    const productID = card.getAttribute("data-id") || `product-${index}`;
     const likeKey = `store-like-${productID}`;
     const dislikeKey = `store-dislike-${productID}`;
+    
+    const likeBtn = initialLikeBtn; // Para tener el nombre más claro
 
     // Cargar valores desde localStorage
     let likeValue = +(localStorage.getItem(likeKey) || 0);
@@ -179,3 +189,44 @@ document.querySelectorAll(".buy-btn").forEach(btn => {
         if(url) window.open(url, "_blank");
     });
 });
+
+// --- 8. Animación de Texto en Header (Nuevo) ---
+const subtitleElement = document.querySelector('.header-subtitle');
+
+if (subtitleElement) {
+    const phrases = subtitleElement.getAttribute('data-text').split('|');
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+
+    function typeEffect() {
+        const currentPhrase = phrases[phraseIndex];
+        
+        if (isDeleting) {
+            // Borrando
+            charIndex--;
+            subtitleElement.textContent = currentPhrase.substring(0, charIndex);
+        } else {
+            // Escribiendo
+            charIndex++;
+            subtitleElement.textContent = currentPhrase.substring(0, charIndex);
+        }
+
+        let typingSpeed = isDeleting ? 75 : 150;
+
+        if (!isDeleting && charIndex === currentPhrase.length) {
+            // Termina de escribir, espera 1.5s antes de borrar
+            typingSpeed = 1500; 
+            isDeleting = true;
+        } else if (isDeleting && charIndex === 0) {
+            // Termina de borrar, cambia de frase y espera 0.5s
+            isDeleting = false;
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+            typingSpeed = 500; 
+        }
+
+        setTimeout(typeEffect, typingSpeed);
+    }
+
+    typeEffect();
+}
