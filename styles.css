@@ -1,113 +1,608 @@
-/* --- RESET Y BASE --- */
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Poppins',sans-serif;color:#222;background:#f5f7fb;-webkit-font-smoothing:antialiased;padding-top:70px;overflow-x:hidden;scroll-behavior:smooth}
-a{text-decoration:none;color:inherit}
-button{cursor:pointer;font-family:inherit;transition:all .3s ease}
+/* styles.css */
 
-/* --- NAV --- */
-nav{position:fixed;top:0;width:100%;z-index:999;display:flex;justify-content:space-between;align-items:center;padding:12px 24px;background:#0b3439;color:#fff;box-shadow:0 4px 18px rgba(0,0,0,.15);border-radius:0 0 12px 12px;font-weight:600}
-nav .brand{font-size:1.4rem;font-weight:800;color:#f0c75e;letter-spacing:1px}
-nav .nav-links{display:flex;gap:18px;transition:.3s}
-nav .nav-links a{padding:8px 12px;border-radius:8px;transition:all .3s ease}
-nav .nav-links a:hover{background:#f0c75e;color:#0b3439;transform:translateY(-2px)}
-.nav-toggle{display:none;font-size:1.8rem;cursor:pointer;color:#f0c75e}
-
-/* Responsive menu */
-@media (max-width:850px){
-  .nav-links{position:fixed;top:0;right:-100%;flex-direction:column;background:#0b3439;width:240px;height:100vh;padding-top:80px;gap:24px;transition:right .4s ease}
-  .nav-links.open{right:0}
-  .nav-toggle{display:block}
+/* Variables de color - Mantenemos la base */
+:root {
+  --color-primary: #5A189A; /* Púrpura oscuro */
+  --color-secondary: #ffc300; /* Amarillo/Dorado para acentos */
+  --color-text: #333333;
+  --color-text-light: #6a6a6a;
+  --color-background: #eef1f5; /* Fondo más claro y ligeramente frío para un look moderno */
+  --color-card-background: #ffffff;
+  --color-nav-background: rgba(255, 255, 255, 0.98);
+  --color-shadow: rgba(0, 0, 0, 0.15);
+  --color-deep-shadow: rgba(0, 0, 0, 0.3);
 }
 
-/* --- HEADER --- */
-.header-wrap{position:relative;min-height:78vh;display:flex;align-items:center;justify-content:center;padding:30px 18px}
-.header-media{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;z-index:0;border-radius:0 0 22px 22px}
-.header-media img, .header-media video{width:100%;height:100%;object-fit:cover;filter:saturate(.95) contrast(.98)}
-.header-overlay{position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(6,12,16,.35),rgba(6,12,16,.65));display:flex;align-items:center;justify-content:center;padding:40px}
-.header-content{z-index:2;text-align:center;color:#fff;max-width:1000px;animation:heroIn .9s cubic-bezier(.2,.9,.2,1)}
-.header-content h1{font-size:3.6rem;font-weight:800;letter-spacing:1px;margin-bottom:12px;text-shadow:0 10px 30px rgba(0,0,0,.45)}
-.header-content p{font-size:1.25rem;margin-bottom:18px;opacity:.95}
-.header-subtitle{font-weight:700;color:#f0c75e;display:inline-block;min-height:30px}
-.header-content a{background:#f0c75e;padding:12px 20px;border-radius:10px;color:#0b3b40;font-weight:700;box-shadow:0 8px 20px rgba(11,30,34,.2);transition:all .3s ease}
-.header-content a:hover{background:#fff;transform:scale(1.05)}
+/* Estilos Generales y Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-/* --- MAIN --- */
-.container{width:95%;max-width:1120px;margin:28px auto}
-.card-section{background:#fff;border-radius:16px;padding:30px;box-shadow:0 8px 28px rgba(12,30,34,.06);margin-bottom:40px;transform:translateY(36px);opacity:0;transition:all .9s ease}
-.card-section.visible{transform:none;opacity:1}
-.card-section h2{color:#12343b;font-size:1.9rem;margin-bottom:14px;padding-left:12px;border-left:6px solid #f0c75e;font-weight:700}
-.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:18px}
-.card{background:#fff;border-radius:12px;padding:18px;box-shadow:0 6px 18px rgba(12,30,34,.04);transition:all .3s ease;cursor:default;display:flex;flex-direction:column;align-items:center;text-align:center}
-.card:hover{transform:translateY(-6px);box-shadow:0 14px 36px rgba(12,30,34,.12)}
-.card h3{color:#0b3b40;margin-bottom:8px;font-weight:600}
-.card p{margin-bottom:12px;color:#444}
+html {
+  scroll-behavior: smooth;
+  perspective: 1000px; /* Habilitar perspectiva 3D a nivel de página */
+}
 
-/* Galería y anuncios: tamaño automático */
-.gallery img,
-.gallery video {
-  width: 100%;
-  height: auto;
-  max-width: 100%;
+body {
+  font-family: 'Poppins', sans-serif;
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  overflow-x: hidden; /* Evitar desplazamiento horizontal por efectos 3D */
+}
+
+/* Tipografía */
+h1, h2, h3 {
+  font-weight: 800;
+  margin-bottom: 0.5em;
+  color: var(--color-primary);
+}
+
+h2 {
+  font-size: 3rem; /* Más grande */
+  text-align: center;
+  margin-bottom: 3rem; /* Más espacio */
+  position: relative;
   display: block;
-  border-radius: 10px;
-  object-fit: contain; /* mantiene proporción sin recortar */
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
-/* Merch: imágenes tamaño automático */
+h2::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 6px;
+  background-color: var(--color-secondary);
+  margin: 0.5rem auto 0;
+  border-radius: 3px;
+  box-shadow: 0 2px 5px var(--color-deep-shadow);
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-primary);
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--color-secondary);
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* --- Animación de entrada para secciones --- */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-section {
+    opacity: 0; /* Ocultar por defecto para la animación */
+    transform: translateY(50px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.card-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+  /* Animación de entrada
+  animation: slideUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  */
+}
+
+/* --- NAV (Barra de Navegación) --- */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--color-nav-background);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.brand {
+  font-size: 1.75rem;
+  font-weight: 900;
+}
+
+.nav-links {
+    transition: transform 0.3s ease;
+}
+
+.nav-links a {
+  margin-left: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a:focus {
+  background-color: var(--color-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 3px 10px rgba(90, 24, 154, 0.4);
+}
+
+.nav-toggle {
+  display: none;
+}
+
+/* --- HEADER (Hero) - Profundidad Visual --- */
+.header-wrap {
+  position: relative;
+  height: 90vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-top: 5rem;
+  clip-path: polygon(0 0, 100% 0, 100% 90%, 0% 100%); /* Efecto de corte diagonal */
+}
+
+.header-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  transform: scale(1.05); /* Ligeramente más grande para efecto Parallax/3D */
+  transition: transform 0.5s ease;
+}
+
+.header-wrap:hover .header-media img {
+    transform: scale(1.03) rotateZ(0.5deg);
+}
+
+.header-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(90, 24, 154, 0.7) 0%, rgba(255, 195, 0, 0.6) 100%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-content {
+  color: white;
+  z-index: 3;
+  padding: 1rem;
+  max-width: 800px;
+  transform-style: preserve-3d;
+  transform: translateZ(50px); /* Darle profundidad 3D al contenido */
+}
+
+.header-content h1 {
+  font-size: 5rem;
+  color: white;
+  text-shadow: 0 5px 15px var(--color-deep-shadow);
+}
+
+.header-content p {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+  font-weight: 300;
+}
+
+.header-content a {
+  display: inline-block;
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  padding: 0.75rem 2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border: 3px solid white;
+}
+
+.header-content a:hover {
+  background-color: var(--color-primary);
+  color: var(--color-secondary);
+  transform: scale(1.05) rotateX(5deg);
+}
+
+/* --- CARD SECTIONS y GRID (Neumorfismo Suave) --- */
+.card-section {
+  padding: 6rem 1.5rem;
+  margin-top: -1px;
+  transform-style: preserve-3d;
+}
+
+.card {
+  background-color: var(--color-card-background);
+  padding: 1.5rem;
+  border-radius: 20px;
+  /* Estilo Neumórfico suave */
+  box-shadow: 
+    8px 8px 16px rgba(174, 174, 192, 0.3),
+    -8px -8px 16px rgba(255, 255, 255, 0.8),
+    inset 0 0 5px rgba(0, 0, 0, 0.05);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transform: translateZ(0);
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateZ(10px) translateY(-5px);
+  box-shadow: 
+    15px 15px 30px var(--color-shadow),
+    -15px -15px 30px rgba(255, 255, 255, 1),
+    0 0 0 5px var(--color-secondary) inset;
+}
+
+.grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* --- SECCIÓN TIENDA / MERCH (Con Likes) --- */
+.store-page h2 {
+    margin-top: 0;
+    padding-top: 3rem;
+}
+
+.merch-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
 .merch-card img {
   width: 100%;
-  height: auto;
-  max-width: 100%;
-  border-radius: 10px;
-  margin-bottom: 8px;
-  object-fit: contain;
+  max-height: 300px; /* Aumento la altura para imágenes de ropa */
+  object-fit: contain; /* Para que la imagen se ajuste sin deformarse */
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  /* Borde sutil para separar la imagen del fondo blanco de la tarjeta */
+  border: 1px solid #eee; 
+  padding: 10px;
 }
 
-/* Merch: botones y likes */
-.buy-btn{padding:10px 18px;border-radius:8px;border:none;background:#f0c75e;color:#12343b;font-weight:700;transition:.3s;margin-bottom:10px}
-.buy-btn:hover{background:#12343b;color:#f0c75e;transform:scale(1.05)}
-
-.like-btn, .dislike-btn{cursor:pointer;user-select:none;font-size:1.2rem;margin:4px;transition:.2s;display:flex;align-items:center;gap:6px}
-.like-btn.active, .dislike-btn.active{transform:scale(1.2);}
-
-/* Inputs */
-textarea,input{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(10,20,22,.06);font-family:inherit;margin-bottom:12px}
-
-/* Contadores */
-.counter-wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:center}
-.counter-box{background:linear-gradient(145deg,#fff,#f7f7f7);padding:16px 20px;border-radius:12px;text-align:center;box-shadow:0 8px 18px rgba(10,20,22,.05)}
-.counter{font-size:2rem;font-weight:800;color:#f0c75e;transition:.3s}
-.counter-box p{margin-top:6px}
-.counter-icon{font-size:1.6rem;display:block;margin-bottom:6px}
-
-/* Carousel */
-.carousel{position:relative;overflow:hidden;border-radius:12px}
-.carousel-inner{display:flex;transition:transform .5s ease}
-.carousel-control{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.3);color:#fff;padding:8px 12px;border-radius:50%;cursor:pointer;user-select:none;font-size:1.2rem}
-.carousel-control.prev{left:10px}
-.carousel-control.next{right:10px}
-
-/* Scroll top button */
-#scrollTop{position:fixed;bottom:24px;right:24px;background:#f0c75e;color:#0b3b40;border:none;border-radius:50%;width:50px;height:50px;font-size:1.5rem;cursor:pointer;display:none;z-index:999;transition:all .3s ease;opacity:0}
-#scrollTop.show{display:block;opacity:1}
-#scrollTop:hover{background:#0b3b40;color:#f0c75e;transform:scale(1.1)}
-
-/* Footer */
-footer{margin-top:36px;padding:26px;text-align:center;background:linear-gradient(135deg,#0b3439,#12343b);color:#fff;border-radius:12px;width:95%;max-width:1120px;margin:0 auto;font-size:.9rem}
-footer a{color:#f0c75e;margin:0 8px;transition:.3s}
-footer a:hover{text-decoration:underline}
-
-/* --- MEDIA QUERIES --- */
-@media(max-width:700px){
-  .header-content h1{font-size:2.2rem}
-  .header-content p{font-size:1rem}
-  .gallery img,.gallery video{height:auto} /* altura automática en móvil */
-  .grid{grid-template-columns:1fr}
+.merch-card .buy-btn {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(90, 24, 154, 0.4);
 }
 
-/* Animations */
-@keyframes heroIn{from{opacity:0;transform:translateY(14px) scale(.995)}to{opacity:1;transform:none}}
+.merch-card .buy-btn:hover {
+  background-color: #7B2CBF;
+  transform: translateY(-3px) scale(1.02);
+}
 
-/* Animations */
-@keyframes heroIn{from{opacity:0;transform:translateY(14px) scale(.995)}to{opacity:1;transform:none}}
+.like-dislike-wrap {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 1rem;
+    gap: 15px;
+}
 
+.like-btn, .dislike-btn {
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.like-btn:hover, .dislike-btn:hover {
+    transform: scale(1.1);
+}
+
+.like-btn span, .dislike-btn span {
+    font-size: 1rem;
+    color: var(--color-text-light);
+}
+
+.like-btn.active {
+    color: #ff0000;
+    animation: pulse 0.5s 1;
+}
+
+.dislike-btn.active {
+    color: #f44336;
+    animation: pulse 0.5s 1;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+/* --- SECCIÓN ANUNCIOS Y RECUERDOS (Media Galleries) --- */
+.gallery .card {
+  padding: 0;
+  box-shadow: none;
+  background-color: transparent;
+  transform: none;
+}
+
+.gallery .card:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.gallery img, .gallery video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 4px 15px var(--color-shadow); /* Sombra suave a la media */
+  transition: transform 0.3s ease;
+}
+
+.gallery img:hover, .gallery video:hover {
+    transform: scale(1.02);
+}
+
+/* CAROUSEL - Estilo para el funcionamiento con JS */
+.carousel {
+  position: relative;
+  overflow: hidden;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.carousel-inner {
+    display: flex;
+    flex-wrap: nowrap;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-inner .card {
+    min-width: 100%;
+    flex-shrink: 0;
+    margin: 0;
+    box-shadow: none;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+.carousel-inner .card img, .carousel-inner .card video {
+    max-height: 400px;
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px var(--color-shadow);
+}
+
+.carousel-control {
+    display: block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    color: var(--color-primary);
+    padding: 1rem 0.5rem;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 2rem;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-control:hover {
+    background-color: var(--color-secondary);
+    color: white;
+}
+
+.carousel-control.prev {
+    left: 10px;
+}
+
+.carousel-control.next {
+    right: 10px;
+}
+
+/* --- SECCIÓN CONTADORES (Flipping Effect) --- */
+.counter-wrap {
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.counter-box {
+  text-align: center;
+  flex-basis: 30%;
+  background-color: var(--color-card-background);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px var(--color-shadow);
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+.counter-box:hover {
+    transform: rotateX(5deg) scale(1.05); /* Microinteracción 3D */
+}
+
+.counter-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--color-primary);
+  text-shadow: 0 0 5px var(--color-secondary);
+}
+
+.counter {
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--color-secondary);
+  display: block;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* --- FOOTER y Scroll Top --- */
+footer {
+  background-color: #310d54;
+  color: white;
+  padding: 2.5rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+footer a {
+  color: var(--color-secondary);
+  margin: 0 0.5rem;
+  font-weight: 400;
+}
+
+footer a:hover {
+  color: white;
+}
+
+#scrollTop {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 5px 15px var(--color-deep-shadow);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0);
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+#scrollTop.show {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+/* --- Media Queries (Responsividad) --- */
+@media (max-width: 992px) {
+  /* NAV Móvil */
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: var(--color-nav-background);
+    box-shadow: 0 5px 5px var(--color-shadow);
+    padding: 1rem 0;
+    border-top: 1px solid #eee;
+  }
+
+  .nav-links a {
+    margin: 0.5rem 2rem;
+    padding: 0.75rem 0;
+    text-align: center;
+  }
+  
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: block;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--color-primary);
+  }
+
+  .header-content h1 {
+    font-size: 4rem;
+  }
+  .grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  h2 {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+    .carousel-control {
+        display: none;
+    }
+    .header-wrap {
+        clip-path: polygon(0 0, 100% 0, 100% 95%, 0% 100%);
+    }
+    .counter-wrap {
+        flex-direction: column;
+        align-items: center;
+    }
+    .counter-box {
+        width: 100%;
+        max-width: 350px;
+    }
+    .counter {
+        font-size: 3rem;
+    }
+    .merch-card img {
+        max-height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-content h1 {
+        font-size: 2.5rem;
+    }
+    .header-content p {
+        font-size: 1rem;
+    }
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 2rem;
+    }
+}
