@@ -1,0 +1,34 @@
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Archivos de editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Archivos temporales
+*.tmp
+*.temp
+*.log
+
+# Archivos de documentación que no queremos en GitHub
+*.odt
+*.pdf
+XimoCoocking.*
+
+# Node modules (si se usa npm en el futuro)
+node_modules/
+package-lock.json
+
+# Archivos de backup
+*.bak
+*.backup
+*~
+
+# Archivos de configuración local
+.env
+.env.local
