@@ -13,7 +13,7 @@
 
 ## 🚀 Ver en Vivo
 
-Visita la web: [https://TU_USUARIO.github.io/empresa-25-26/](https://TU_USUARIO.github.io/empresa-25-26/)
+Visita la web: [Empresa-25-26](https://uplays.github.io/Empresa-25-26/)
 
 ## 📁 Estructura del Proyecto
 
@@ -54,24 +54,6 @@ Visita la web: [https://TU_USUARIO.github.io/empresa-25-26/](https://TU_USUARIO.
 - JavaScript ES6+
 - Glassmorphism
 - Responsive Design
-
-## 🛠️ Instalación Local
-
-1. Clona el repositorio:
-```bash
-git clone https://github.com/TU_USUARIO/empresa-25-26.git
-```
-
-2. Abre `index.html` en tu navegador
-
-O usa un servidor local:
-```bash
-# Con Python
-python -m http.server 8000
-
-# Con Node.js
-npx http-server
-```
 
 ## 📱 Compatibilidad
 
@@ -117,3 +99,4 @@ npx http-server
 **Desarrollado con ❤️ para el proyecto Empresa 25-26**
 
 🏕️ ¡Apoya nuestro viaje a Francia! 🇫🇷
+
